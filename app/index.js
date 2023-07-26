@@ -26,6 +26,7 @@ let data = [
     image: "https://cdn.eso.org/images/screen/eso1907a.jpg",
   },
 ];
+let id = data.length;
 function App() {
   const server = http.createServer(app);
   app.use(bodyParser.json());
@@ -47,15 +48,39 @@ function App() {
         req.body.price && req.body.price !== "" ? req.body.price : "0";
       var image = req.body.image && req.body.image !== "" ? req.body.image : "";
       data.push({
-        id: data.length + 1,
+        id: id + 1,
         title: req.body.title,
         price: price,
         image: image,
       });
+      id++;
       res.status(201).json({ data: data });
     } catch (e) {
       res.status(500).json({});
     }
+  });
+
+  app.delete("/delete", (req, res) => {
+    let data2 = data;
+    data = data2.filter((d) => {
+      return !(d.id == req.query.id);
+    });
+    res.json({ data: data });
+  });
+
+  app.patch("/update", (req, res) => {
+    var errors = [];
+    if (req.body.title.length < 1) {
+      errors.push({ key: "title", errorText: "عنوان باید حتما وارد شود." });
+      res.status(400).json({ errors: errors });
+      return;
+    }
+    data.forEach((d) => {
+      if (d.id == req.query.id) {
+        d.title = req.body.title;
+      }
+    });
+    res.status(200).json({ data: data });
   });
 
   app.post("/signup", (req, res) => {
