@@ -4,13 +4,58 @@ import http from "http";
 import crypto from "crypto";
 let users = [];
 const app = express();
+let data = [
+  {
+    id: 1,
+    title: "northen light",
+    price: 2,
+    image:
+      "https://www.freecodecamp.org/news/content/images/size/w2000/2022/09/jonatan-pie-3l3RwQdHRHg-unsplash.jpg",
+  },
+  {
+    id: 2,
+    title: "earth",
+    price: 10,
+    image:
+      "https://www-cdn.eumetsat.int/files/styles/16_9_large/s3/2023-04/mtg-i1.jpg?h=d1cb525d&itok=O-COkB2i",
+  },
+  {
+    id: 3,
+    title: "black hole",
+    price: 100,
+    image: "https://cdn.eso.org/images/screen/eso1907a.jpg",
+  },
+];
 function App() {
   const server = http.createServer(app);
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
   app.get("/", (req, res) => {
-    res.json({ name: "farshid mother fucker" });
+    res.status(200).json({ data: data });
+  });
+
+  app.post("/add", (req, res) => {
+    try {
+      var errors = [];
+      if (req.body.title.length < 1) {
+        errors.push({ key: "title", errorText: "عنوان باید حتما وارد شود." });
+        res.status(400).json({ errors: errors });
+        return;
+      }
+      var price =
+        req.body.price && req.body.price !== "" ? req.body.price : "0";
+      var image = req.body.image && req.body.image !== "" ? req.body.image : "";
+      data.push({
+        id: data.length + 1,
+        title: req.body.title,
+        price: price,
+        image: image,
+      });
+      res.status(201).json({ data: data });
+    } catch (e) {
+      res.status(500).json({});
+    }
   });
 
   app.post("/signup", (req, res) => {
@@ -31,6 +76,7 @@ function App() {
           });
         }
         res.status(400).json({ errors: errors });
+        return;
       }
       var err = false;
       users.forEach((user) => {
@@ -44,6 +90,7 @@ function App() {
           errorText: "با این ایمیل قبلا ثبت نام انجام شده",
         });
         res.status(400).json({ errors: errors });
+        return;
       }
       users.push({
         email: req.body.email,
@@ -75,6 +122,7 @@ function App() {
           });
         }
         res.status(400).json({ errors: errors });
+        return;
       }
       var token = crypto
         .createHmac("sha256", Date.now + req.body.email)
@@ -90,7 +138,8 @@ function App() {
         }
       });
       if (!success) {
-        res.status(403).json({ errorText: "کتربری با این مشخصات یافت نشد" });
+        res.status(403).json({ errorText: "کاربری با این مشخصات یافت نشد" });
+        return;
       }
       res.status(200).json({ token: token, token_type: "Bearer" });
     } catch (e) {
