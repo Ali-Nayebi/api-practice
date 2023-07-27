@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import http from "http";
 import crypto from "crypto";
+import fileUpload from "express-fileupload";
 let users = [];
 const app = express();
 let data = [
@@ -44,6 +45,11 @@ function App() {
   const server = http.createServer(app);
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(
+    fileUpload({
+      createParentPath: true,
+    })
+  );
 
   app.get("/", (req, res) => {
     res.status(200).json({ data: data });
@@ -109,6 +115,25 @@ function App() {
         data: [],
       });
       return;
+    }
+  });
+
+  app.post("/upload", (req, res) => {
+    try {
+      if (
+        req.files.image.mimetype === "image/png" ||
+        req.files.image.mimetype === "image/jpg"
+      ) {
+        req.files.image.mv("./upload/" + req.files.image.name);
+        res.status(201).json([]);
+        return;
+      } else {
+        res
+          .status(401)
+          .json({ errorText: "فرمت فایل وارد شده اشتباه می باشد" });
+      }
+    } catch (e) {
+      res.status(500).json({});
     }
   });
 
