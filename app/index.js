@@ -21,6 +21,19 @@ let data = [
   },
   {
     id: 3,
+    title: "earth curve",
+    price: 1000,
+    image:
+      "https://www-cdn.eumetsat.int/files/styles/16_9_large/s3/2023-04/mtg-i1.jpg?h=d1cb525d&itok=O-COkB2i",
+  },
+  {
+    id: 4,
+    title: "super masive black hole",
+    price: 200,
+    image: "https://cdn.eso.org/images/screen/eso1907a.jpg",
+  },
+  {
+    id: 5,
     title: "black hole",
     price: 100,
     image: "https://cdn.eso.org/images/screen/eso1907a.jpg",
@@ -34,6 +47,69 @@ function App() {
 
   app.get("/", (req, res) => {
     res.status(200).json({ data: data });
+  });
+
+  app.get("/paginate", (req, res) => {
+    if (req.query.page == 1) {
+      res.status(200).json({
+        current_page: req.query.page,
+        count: data.length,
+        last_page: 2,
+        data: [
+          {
+            id: 1,
+            title: "northen light",
+            price: 2,
+            image:
+              "https://www.freecodecamp.org/news/content/images/size/w2000/2022/09/jonatan-pie-3l3RwQdHRHg-unsplash.jpg",
+          },
+          {
+            id: 2,
+            title: "earth",
+            price: 10,
+            image:
+              "https://www-cdn.eumetsat.int/files/styles/16_9_large/s3/2023-04/mtg-i1.jpg?h=d1cb525d&itok=O-COkB2i",
+          },
+          {
+            id: 3,
+            title: "earth curve",
+            price: 1000,
+            image:
+              "https://www-cdn.eumetsat.int/files/styles/16_9_large/s3/2023-04/mtg-i1.jpg?h=d1cb525d&itok=O-COkB2i",
+          },
+        ],
+      });
+      return;
+    } else if (req.query.page == 2) {
+      res.status(200).json({
+        current_page: req.query.page,
+        count: data.length,
+        last_page: 2,
+        data: [
+          {
+            id: 4,
+            title: "super masive black hole",
+            price: 200,
+            image: "https://cdn.eso.org/images/screen/eso1907a.jpg",
+          },
+          {
+            id: 5,
+            title: "black hole",
+            price: 100,
+            image: "https://cdn.eso.org/images/screen/eso1907a.jpg",
+          },
+        ],
+      });
+      return;
+    } else {
+      res.status(200).json({
+        current_page: req.query.page,
+        count: data.length,
+        last_page: 2,
+        data: [],
+      });
+      return;
+    }
   });
 
   app.post("/add", (req, res) => {
@@ -173,7 +249,7 @@ function App() {
   });
 
   server.listen(3000, () => {
-    console.log("server running on ort 3000");
+    console.log("server running on port 3000");
   });
 }
 export default App;
