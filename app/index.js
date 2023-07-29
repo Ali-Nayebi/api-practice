@@ -56,6 +56,23 @@ function App() {
   });
 
   app.get("/paginate", (req, res) => {
+    let [token_type, token] =
+      req.header("Authorization") && req.header("Authorization").length > 0
+        ? req.header("Authorization").split(" ")
+        : ["", ""];
+    let isLogin = false;
+    if (token == "" || token_type == "") {
+      isLogin = false;
+    } else {
+      users.forEach((user) => {
+        if (user.token == token && user.token_type == token_type) {
+          isLogin = true;
+        }
+      });
+    }
+    if (!isLogin) {
+      res.status(401).json("not authorized");
+    }
     if (req.query.page == 1) {
       res.status(200).json({
         current_page: req.query.page,
@@ -222,6 +239,7 @@ function App() {
         email: req.body.email,
         password: req.body.password,
         token: "",
+        token_type: "",
       });
       console.log(users);
       res.status(201).json({});
@@ -260,6 +278,7 @@ function App() {
           user.password === req.body.password
         ) {
           user.token = token;
+          user.token_type = "Bearer";
           success = true;
         }
       });
@@ -271,6 +290,17 @@ function App() {
     } catch (e) {
       res.status(500).json({});
     }
+  });
+
+  app.get("/profile", (req, res) => {
+    let [token_type, token] = req.header("Authorization").split(" ");
+    users.forEach((user) => {
+      if (user.token == token && user.token_type == token_type) {
+        res.status(200).json({ user: user });
+        return;
+      }
+    });
+    res.status(401).json("not authorized");
   });
 
   server.listen(3000, () => {
