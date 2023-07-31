@@ -1,24 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import { create } from "jss";
+import rtl from "jss-rtl";
+import { StylesProvider, jssPreset } from "@mui/styles";
+import theme from "./theme/theme";
+import { ThemeProvider } from "@mui/material/styles";
+import Routes from "./routes/index";
+
+const jss = create({ plugin: [...jssPreset().plugins, rtl()] });
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <StylesProvider jss={jss}>
+        <Routes />
+      </StylesProvider>
+    </ThemeProvider>
   );
 }
 
