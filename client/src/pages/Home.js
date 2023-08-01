@@ -10,7 +10,10 @@ export default function Home() {
   const [image, setImage] = useState("");
   const [price, setPrice] = useState("");
   const [errors, setErrors] = useState([]);
+  const [errors2, setErrors2] = useState([]);
   const [disabled, setDisabled] = useState(false);
+  const [titleu, setTitleu] = useState("");
+  const [id, setId] = useState(0);
   useEffect(() => {
     setLoading(true);
     fetch("http://localhost:3001")
@@ -57,8 +60,43 @@ export default function Home() {
         setDisabled(false);
       });
   };
+  const onUpdateClick = () => {
+    axios("http://localhost:3001/update?id=" + id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        title: titleu,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          setData(response.data.data);
+        }
+      })
+      .catch((e) => {
+        setErrors2(e.response.data.errors);
+      });
+  };
   return (
+    // update
     <Container maxWidth="lg">
+      <Grid container>
+        <TextField
+          value={titleu}
+          onChange={(e) => setTitleu(e.target.value)}
+          style={{ margin: 10 }}
+          label="عنوان"
+        />
+        <Button onClick={onUpdateClick}>ویرایش کردن</Button>
+      </Grid>
+      {errors2.map((e) => (
+        <li key={e.key}>
+          {e.key}:{e.errorText}
+        </li>
+      ))}
+      {/* items */}
       <Grid container style={{ marginTop: 15 }}>
         {loading ? (
           <span>loading</span>
@@ -70,10 +108,15 @@ export default function Home() {
               title={item.title}
               price={item.price}
               ondelete={() => onDeleteClick(item.id)}
+              onupdate={() => {
+                setId(item.id);
+                setTitleu(item.title);
+              }}
             />
           ))
         )}
       </Grid>
+      {/* add item */}
       <Grid container>
         <TextField
           value={title}

@@ -186,7 +186,7 @@ function App() {
     res.json({ data: data });
   });
 
-  app.patch("/update", (req, res) => {
+  app.put("/update", (req, res) => {
     var errors = [];
     if (req.body.title.length < 1) {
       errors.push({ key: "title", errorText: "عنوان باید حتما وارد شود." });

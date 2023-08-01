@@ -1,7 +1,7 @@
 import { Button, Grid, Typography } from "@mui/material";
 import React from "react";
 
-export default function Item({ image, title, price, ondelete }) {
+export default function Item({ image, title, price, ondelete, onupdate }) {
   return (
     <Grid
       item
@@ -24,6 +24,7 @@ export default function Item({ image, title, price, ondelete }) {
           {price} هزار تومان
         </Typography>
         <Button onClick={ondelete}>حذف</Button>
+        <Button onClick={onupdate}>ویرایش</Button>
       </div>
     </Grid>
   );
