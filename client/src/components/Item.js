@@ -13,11 +13,7 @@ export default function Item({ image, title, price, ondelete }) {
       }}
     >
       <div style={{ border: "1px solid #a1a1a1" }}>
-        <img
-          style={{ width: "100%" }}
-          src={image}
-          alt=""
-        />
+        <img style={{ width: "100%", height: 200 }} src={image} alt="" />
         <Typography variant="h6" style={{ textAlign: "center" }}>
           {title}
         </Typography>
