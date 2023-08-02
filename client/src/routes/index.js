@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Profile from "../pages/Profile";
+import Paginate from "../pages/Paginate";
 
 export default function index() {
   return (
@@ -13,6 +14,8 @@ export default function index() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/paginate/:page" element={<Paginate />} />
+        <Route path="/paginate" element={<Paginate />} />
       </Routes>
     </BrowserRouter>
   );

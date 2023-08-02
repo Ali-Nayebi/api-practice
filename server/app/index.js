@@ -56,23 +56,23 @@ function App() {
   });
 
   app.get("/paginate", (req, res) => {
-    let [token_type, token] =
-      req.header("Authorization") && req.header("Authorization").length > 0
-        ? req.header("Authorization").split(" ")
-        : ["", ""];
-    let isLogin = false;
-    if (token == "" || token_type == "") {
-      isLogin = false;
-    } else {
-      users.forEach((user) => {
-        if (user.token == token && user.token_type == token_type) {
-          isLogin = true;
-        }
-      });
-    }
-    if (!isLogin) {
-      res.status(401).json("not authorized");
-    }
+    // let [token_type, token] =
+    //   req.header("Authorization") && req.header("Authorization").length > 0
+    //     ? req.header("Authorization").split(" ")
+    //     : ["", ""];
+    // let isLogin = false;
+    // if (token == "" || token_type == "") {
+    //   isLogin = false;
+    // } else {
+    //   users.forEach((user) => {
+    //     if (user.token == token && user.token_type == token_type) {
+    //       isLogin = true;
+    //     }
+    //   });
+    // }
+    // if (!isLogin) {
+    //   res.status(401).json("not authorized");
+    // }
     if (req.query.page == 1) {
       res.status(200).json({
         current_page: req.query.page,
