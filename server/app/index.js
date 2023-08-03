@@ -146,7 +146,7 @@ function App() {
         return;
       } else {
         res
-          .status(401)
+          .status(400)
           .json({ errorText: "فرمت فایل وارد شده اشتباه می باشد" });
       }
     } catch (e) {
